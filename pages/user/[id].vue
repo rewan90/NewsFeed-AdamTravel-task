@@ -13,12 +13,12 @@
         <v-card class="posts-container">
           <v-card-title>Profile</v-card-title>
           <v-card-text>
-            <div class="post-content">Username: @{{ user?.username }}</div>
-            <div class="post-content">Email: {{ user?.email }}</div>
-            <div class="post-content">Phone: {{ user?.phone }}</div>
-            <div class="post-content">Age: {{ user?.age }}</div>
-            <div class="post-content">Gender: {{ user?.gender }}</div>
-            <div class="post-content">Birth Date: {{ user?.birthDate }}</div>
+            <div class="post-content"><span>Username</span>: @{{ user?.username }}</div>
+            <div class="post-content"><span>Email</span>: {{ user?.email }}</div>
+            <div class="post-content"><span>Phone</span>: {{ user?.phone }}</div>
+            <div class="post-content"><span>Age</span>: {{ user?.age }}</div>
+            <div class="post-content"><span>Gender</span>: {{ user?.gender }}</div>
+            <div class="post-content"><span>Birth Date</span>: {{ user?.birthDate }}</div>
           </v-card-text>
         </v-card>
       </v-col>
@@ -26,12 +26,12 @@
         <v-card class="posts-container">
           <v-card-title>Physical Characteristics</v-card-title>
           <v-card-text>
-            <div class="post-content">Height: {{ user?.height }} cm</div>
-            <div class="post-content">Weight: {{ user?.weight }} kg</div>
-            <div class="post-content">Eye Color: {{ user?.eyeColor }}</div>
-            <div class="post-content">Hair Color: {{ user?.hair.color }}</div>
-            <div class="post-content">Hair Type: {{ user?.hair.type }}</div>
-            <div class="post-content">Blood Group: {{ user?.bloodGroup }}</div>
+            <div class="post-content"><span>Height</span>: {{ user?.height }} cm</div>
+            <div class="post-content"><span>Weight</span>: {{ user?.weight }} kg</div>
+            <div class="post-content"><span>Eye Color</span>: {{ user?.eyeColor }}</div>
+            <div class="post-content"><span>Hair Color</span>: {{ user?.hair.color }}</div>
+            <div class="post-content"><span>Hair Type</span>: {{ user?.hair.type }}</div>
+            <div class="post-content"><span>Blood Group</span>: {{ user?.bloodGroup }}</div>
           </v-card-text>
         </v-card>
       </v-col>
@@ -49,11 +49,11 @@
       </v-col>
       <v-col cols="12" sm="6" md="4" lg="3">
         <v-card class="posts-container">
-          <v-card-title>Company</v-card-title>
+          <v-card-title>Company Info</v-card-title>
           <v-card-text>
-            <div class="post-content">{{ user?.company.name }}</div>
-            <div class="post-content">{{ user?.company.department }}</div>
-            <div class="post-content">{{ user?.company.title }}</div>
+            <div class="post-content"><span>Company Name</span>: {{ user?.company.name }}</div>
+            <div class="post-content"><span>Department</span>: {{ user?.company.department }}</div>
+            <div class="post-content"><span>Gob Title </span>: {{ user?.company.title }}</div>
           </v-card-text>
         </v-card>
       </v-col>
@@ -61,11 +61,10 @@
         <v-card class="posts-container">
           <v-card-title>Bank</v-card-title>
           <v-card-text>
-            <div class="post-content">
-              Card Number: {{ user?.bank.cardNumber }}
+            <div class="post-content"><span>Card Number</span>: {{ user?.bank.cardNumber }}
             </div>
-            <div class="post-content">Card Type: {{ user?.bank.cardType }}</div>
-            <div class="post-content">Currency: {{ user?.bank.currency }}</div>
+            <div class="post-content"><span>Card Type</span>: {{ user?.bank.cardType }}</div>
+            <div class="post-content"><span>Currency</span>: {{ user?.bank.currency }}</div>
           </v-card-text>
         </v-card>
       </v-col>
@@ -139,8 +138,11 @@ onMounted(() => {
   background-color: #f7f7f7;
   border-radius: 10px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  
 }
-
+.posts-container span{
+  font-weight: bold;
+ }
 .posts-header {
   margin-bottom: 20px;
 }

@@ -1,4 +1,3 @@
-
 import vuetify from "vite-plugin-vuetify";
 import { createResolver } from "@nuxt/kit";
 
@@ -20,8 +19,13 @@ export default defineNuxtConfig({
   build: {
     transpile: ["vuetify"],
   },
- 
-  modules: ["@pinia/nuxt"],
+
+  modules: [
+    // ...
+    "@pinia/nuxt",
+  ],
+
+  plugins: ["~/plugins/vuetify.js"],
 
   hooks: {
     "vite:extendConfig": (config) => {
@@ -30,5 +34,5 @@ export default defineNuxtConfig({
       });
     },
   },
- 
+  
 });
