@@ -7,24 +7,11 @@
     @mouseout="hover = false"
   >
     <PostUser :userId="post.userId" />
-    <v-spacer></v-spacer>
     <v-card-title class="post-card__title">{{ post.title }}</v-card-title>
     <v-card-text class="post-card__content"
       >{{ body }}
       <span v-if="showmore" @click="updateshowmore()">...</span></v-card-text
     >
-    <!-- <v-btn
-      class="flex-end"
-      color="primary"
-      @click="$router.push(`/post/${post.id}`)"
-    >
-      Read More
-    </v-btn> -->
-    <!-- <span>
-         <v-icon left>mdi-eye</v-icon>
-        {{ post.views }}
-     </span>
-      -->
 
     <v-card-actions class="post-card__actions justify-space-around">
       <v-btn
@@ -46,7 +33,7 @@
       <v-btn
         class="post-card__action"
         color="secondary"
-        @click="showCommentDialog"
+        @click="showCommentForm = !showCommentForm"
       >
         <v-icon left>mdi-comment</v-icon>
         Comment
@@ -58,7 +45,7 @@
           color="success"
           @click="sharePost(post.id)"
         >
-          <v-icon left>mdi-share</v-icon>
+          <v-icon left>mdi-share-variant</v-icon>
           Share
         </v-btn>
 
@@ -82,25 +69,33 @@
       @showMoreComments="showMoreComments"
     />
   </v-card>
-  <v-card v-model="commentDialog">
-    <v-card>
-      <v-card-title> Comment </v-card-title>
-      <v-card-text>
-        <v-textarea
-          v-model="newComment.text"
-          label="Write your comment"
-          row-height="15"
-          rows="1"
-          variant="outlined"
-          auto-grow
-        ></v-textarea>
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn color="primary" @click="commentOnPost(post.id)"> Post </v-btn>
-        <v-btn color="secondary" @click="commentDialog = false"> Cancel </v-btn>
-      </v-card-actions>
-    </v-card>
+  <v-card>
+    <transition name="fade">
+      <div v-if="showCommentForm">
+        <v-card>
+          <v-card-title>Comment</v-card-title>
+          <v-card-text>
+            <v-textarea
+              v-model="newComment.text"
+              label="Write your comment"
+              row-height="15"
+              rows="1"
+              variant="outlined"
+              auto-grow
+            ></v-textarea>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" @click="commentOnPost(post.id)"
+              >Comment</v-btn
+            >
+            <v-btn color="secondary" @click="showCommentForm = false"
+              >Cancel</v-btn
+            >
+          </v-card-actions>
+        </v-card>
+      </div>
+    </transition>
   </v-card>
 </template>
 
@@ -125,7 +120,7 @@ export default {
       postUrl: "",
       isLiked: false,
       isDisLiked: false,
-      commentDialog: false,
+      showCommentForm: false,
       newComment: {
         firstName: "First",
         lastName: "Last",
@@ -250,6 +245,14 @@ export default {
     &:last-child {
       margin-right: 0;
     }
+  }
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 0.5s;
+  }
+  .fade-enter,
+  .fade-leave-to {
+    opacity: 0;
   }
 }
 </style>

@@ -2,7 +2,6 @@
   <v-app>
     <v-main>
       <v-container>
-        <Header />
         <NuxtPage />
       </v-container>
     </v-main>
