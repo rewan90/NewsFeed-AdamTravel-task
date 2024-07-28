@@ -15,10 +15,8 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { useFeedStore } from "~/stores/feedStore";
 import { useRoute } from "vue-router";
 
-const feedStore = useFeedStore();
 const route = useRoute();
 const post = ref(null);
 

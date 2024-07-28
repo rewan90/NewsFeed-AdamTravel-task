@@ -1,66 +1,58 @@
 <template>
-  <v-container
-    fluid
-    class="feed-page"
-    ref="postContainer"
-    v-intersect="loadMorePosts"
-  >
-    <v-row justify="center">
-      <v-col cols="12" sm="8" md="6">
-        <h1 class="text-h4 font-weight-bold mb-4">Feed Page</h1>
-        <v-divider class="mb-4"></v-divider>
+  <v-infinite-scroll :posts="posts" :onLoad="loadMorePosts">
+    <v-container fluid class="feed-page">
+      <v-row justify="center">
+        <v-col cols="12" sm="8" md="6">
+          <h1 class="text-h4 font-weight-bold mb-4">Feed Page</h1>
+          <v-divider class="mb-4"></v-divider>
 
-        <div class="my-4" v-for="post in feedStore.posts" :key="post.id">
-          <PostCard :post="post" :postClass="$attrs.class" />
-        </div>
-
-        <div v-if="feedStore.posts.length === 0">
-          <p class="text-center mt-4">No New Posts</p>
-        </div>
-<!-- <div v-if="comments.length">
-  <CommentCard
-    v-for="(comment, index) in feedStore.comments.map((comment) => ({
-      ...comment,
-      key: index,
-    }))"
-    :key="comment.key"
-    :comment="comment"
-    class="mb-4"
-  />
-</div> -->
-        <v-progress-circular indeterminate color="primary" v-if="loading" />
-      </v-col>
-    </v-row>
-  </v-container>
+          <div class="my-4" v-for="post in posts" :key="post.id">
+            <PostCard :post="post" :postClass="$attrs.class" />
+          </div>
+          <div v-if="posts.length === 0">
+            <p class="text-center mt-4">No New Posts</p>
+          </div>
+          <div v-if="posts.length == total && total > 0">
+            <p class="text-center mt-4">No New Posts</p>
+          </div>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-infinite-scroll>
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
-import { useFeedStore } from "~/stores/feedStore";
 import PostCard from "~/components/PostCard.vue";
 
 export default {
   name: "FeedPage",
   components: { PostCard },
-  setup() {
-    const feedStore = useFeedStore();
-    feedStore.fetchPosts();
-    // feedStore.fetchComments();
-    feedStore.fetchUsers();
-
-
-
-
-    const postContainer = ref(null);
-    const loading = ref(false);
-
-    const loadMorePosts = async () => {
-      loading.value = true;
-      await feedStore.fetchMorePosts();
-      loading.value = false;
+  data() {
+    return {
+      limit: 1,
+      posts: [],
+      total: 0,
     };
-
-    return { feedStore, postContainer, loading, loadMorePosts };
+  },
+  methods: {
+    async loadMorePosts({ done }) {
+      if (this.posts.length == this.total && this.total > 0) {
+        done("empty");
+      } else {
+        await this.fetchMorePosts(this.limit);
+        done("ok");
+      }
+    },
+    async fetchMorePosts(limit) {
+      const offset = this.posts.length; // offset by the number of posts already fetched
+      const response = await fetch(
+        `https://dummyjson.com/posts?limit=${limit}&skip=${offset}`
+      );
+      const data = await response.json();
+      this.posts.push(...data.posts);
+      // get total
+      this.total = data.total;
+    },
   },
 };
 </script>

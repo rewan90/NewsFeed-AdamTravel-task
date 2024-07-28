@@ -4,7 +4,6 @@
       <v-container>
         <Header />
         <NuxtPage />
-        <Footer />
       </v-container>
     </v-main>
   </v-app>

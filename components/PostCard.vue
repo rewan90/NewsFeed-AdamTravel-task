@@ -8,11 +8,11 @@
   >
     <PostUser :userId="post.userId" />
     <v-spacer></v-spacer>
-      <v-card-title class="post-card__title">{{ post.title }}</v-card-title>
-      <v-card-text class="post-card__content"
-        >{{ body }}
-        <span v-if="showmore" @click="updateshowmore()">...</span></v-card-text
-      >
+    <v-card-title class="post-card__title">{{ post.title }}</v-card-title>
+    <v-card-text class="post-card__content"
+      >{{ body }}
+      <span v-if="showmore" @click="updateshowmore()">...</span></v-card-text
+    >
     <!-- <v-btn
       class="flex-end"
       color="primary"
@@ -20,19 +20,26 @@
     >
       Read More
     </v-btn> -->
-     <!-- <span>
+    <!-- <span>
          <v-icon left>mdi-eye</v-icon>
         {{ post.views }}
      </span>
       -->
 
     <v-card-actions class="post-card__actions justify-space-around">
-      
-      <v-btn class="post-card__action" v-bind:color="isDisLiked ?  'error' : ''" @click="reactToPost('disLike')">
+      <v-btn
+        class="post-card__action"
+        v-bind:color="isDisLiked ? 'error' : ''"
+        @click="reactToPost('disLike')"
+      >
         <v-icon left>mdi-thumb-down</v-icon>
         {{ post.reactions.dislikes }}
       </v-btn>
-      <v-btn class="post-card__action" v-bind:color="isLiked ?  'primary' : ''" @click="reactToPost('like')">
+      <v-btn
+        class="post-card__action"
+        v-bind:color="isLiked ? 'primary' : ''"
+        @click="reactToPost('like')"
+      >
         <v-icon left>mdi-thumb-up</v-icon>
         {{ post.reactions.likes }}
       </v-btn>
@@ -44,26 +51,7 @@
         <v-icon left>mdi-comment</v-icon>
         Comment
       </v-btn>
-      <v-dialog v-model="commentDialog" width="500">
-        <v-card>
-          <v-card-title> Comment </v-card-title>
-          <v-card-text>
-            <v-textarea
-              v-model="newComment.text"
-              label="Write your comment"
-            ></v-textarea>
-          </v-card-text>
-          <v-card-actions>
-            <v-spacer></v-spacer>
-            <v-btn color="primary" @click="commentOnPost(post.id)">
-              Post
-            </v-btn>
-            <v-btn color="secondary" @click="commentDialog = false">
-              Cancel
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-dialog>
+
       <div>
         <v-btn
           class="post-card__action"
@@ -88,7 +76,31 @@
         </v-dialog>
       </div>
     </v-card-actions>
-    <CommentCard :comments="comments" />
+    <CommentCard
+      :comments="comments"
+      :total="total"
+      @showMoreComments="showMoreComments"
+    />
+  </v-card>
+  <v-card v-model="commentDialog">
+    <v-card>
+      <v-card-title> Comment </v-card-title>
+      <v-card-text>
+        <v-textarea
+          v-model="newComment.text"
+          label="Write your comment"
+          row-height="15"
+          rows="1"
+          variant="outlined"
+          auto-grow
+        ></v-textarea>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn color="primary" @click="commentOnPost(post.id)"> Post </v-btn>
+        <v-btn color="secondary" @click="commentDialog = false"> Cancel </v-btn>
+      </v-card-actions>
+    </v-card>
   </v-card>
 </template>
 
@@ -122,43 +134,50 @@ export default {
           "https://www.gravatar.com/avatar/205e460b479e2e5b48aec07710c08d50?s=200&d=mp&r=g",
         text: "",
       },
-      body: ""
+      body: "",
+      total: 0,
+      limit: 2,
     };
   },
   methods: {
     async fetchCommentsById(postId) {
       const response = await fetch(
-        "https://dummyjson.com/comments/post/" + postId
+        "https://dummyjson.com/comments/post/" + postId + "?limit=" + this.limit
       );
       const data = await response.json();
       this.comments = data.comments;
+      this.total = data.total;
+    },
+    showMoreComments() {
+      this.limit = this.limit + 3;
+      this.fetchCommentsById(this.post.id);
     },
     shortText() {
-      let value = this.post.body
+      let value = this.post.body;
       value.length > 50 ? (this.showmore = true) : (this.showmore = false);
-      this.showmore ? this.body = value.substr(0, 50) : this.body  = value;
+      this.showmore ? (this.body = value.substr(0, 50)) : (this.body = value);
     },
     reactToPost(type) {
       // console.log(type);
-      if (type == 'like' && this.isLiked == false) {
-        this.isLiked = true
+      if (type == "like" && this.isLiked == false) {
+        this.isLiked = true;
         this.post.reactions.likes++;
-      } else if(this.isLiked == true){
-        this.isLiked = false
+      } else if (this.isLiked == true) {
+        this.isLiked = false;
         this.post.reactions.likes--;
       }
-      if (type == 'disLike' && this.isDisLiked == false) {
-        this.isDisLiked = true
+      if (type == "disLike" && this.isDisLiked == false) {
+        this.isDisLiked = true;
         this.post.reactions.dislikes++;
         // console.log(this.post.reactions.dislikes);
-      } else if(this.isDisLiked == true){
-        this.isDisLiked = false
+      } else if (this.isDisLiked == true) {
+        this.isDisLiked = false;
         this.post.reactions.dislikes--;
       }
     },
-    updateshowmore(){
-      this.showmore = false
-      this.body = this.post.body
+    updateshowmore() {
+      this.showmore = false;
+      this.body = this.post.body;
     },
     showCommentDialog() {
       this.commentDialog = true;
@@ -194,7 +213,7 @@ export default {
   mounted() {
     // console.log(this.post);
     this.fetchCommentsById(this.post.id);
-    this.shortText()
+    this.shortText();
   },
 };
 </script>

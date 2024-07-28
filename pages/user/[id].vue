@@ -90,9 +90,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import { useFeedStore } from "~/stores/feedStore";
 
-const feedStore = useFeedStore();
 const route = useRoute();
 const user = ref(null);
 const posts = ref([]);
