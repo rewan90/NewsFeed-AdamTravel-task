@@ -7,8 +7,9 @@
     @mouseout="hover = false"
   >
     <PostUser :userId="post.userId" />
-    <v-card-title class="post-card__title">{{ post.title }}</v-card-title>
-    <v-card-text class="post-card__content"
+
+    <v-card-title class="post-card__title mx-5">{{ post.title }}</v-card-title>
+    <v-card-text class="post-card__content mx-6"
       >{{ body }}
       <span v-if="showmore" @click="updateshowmore()">...</span></v-card-text
     >
@@ -69,21 +70,31 @@
       @showMoreComments="showMoreComments"
     />
   </v-card>
-  <v-card>
+  <v-card class="my-3">
     <transition name="fade">
       <div v-if="showCommentForm">
         <v-card>
-          <v-card-title>Comment</v-card-title>
-          <v-card-text>
-            <v-textarea
-              v-model="newComment.text"
-              label="Write your comment"
-              row-height="15"
-              rows="1"
-              variant="outlined"
-              auto-grow
-            ></v-textarea>
-          </v-card-text>
+          <v-card-title> Add Comment</v-card-title>
+          <div class="d-inline-flex justify-center align-self-center ">
+            <img
+              :src="newComment.avatarUrl"
+              alt="User Image"
+              width="70"
+              
+              class="d-inline-flex justify-center align-self-center mx-5"
+            />
+            <v-card-text class="d-inline-flex justify-center align-self-center ">
+              <v-textarea
+
+              class="d-inline-flex justify-center align-self-center "
+                v-model="newComment.text"
+                label="Write your comment"
+                row-height="15"
+                rows="1"
+                variant="outlined"
+                auto-grow
+              ></v-textarea>
+
           <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn color="primary" @click="commentOnPost(post.id)"
@@ -93,6 +104,10 @@
               >Cancel</v-btn
             >
           </v-card-actions>
+            </v-card-text>
+          </div>
+
+         
         </v-card>
       </div>
     </transition>
